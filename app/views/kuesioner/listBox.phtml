@@ -1,0 +1,57 @@
+<!-- Small boxes (Kuesioner box) -->
+<div class="row"><?php if ($kuesionerRs->count()) { foreach ($kuesionerRs as $kue) {?>
+
+    <div class="col-lg-3 col-xs-6"><!-- /col for kuesioner-x -->
+        <div class="box box-solid bg-aqua">
+            <div class="box-header">
+                <h3 class="box-title"><?php echo $kue->name;?></h3>
+                <div class="box-tools pull-right">
+                    <form>
+                        <button name="kue_id" type="submit" class="btn btn-info btn-sm" title="Delete"
+                            formaction="kuesioner/delt" formmethod="post" value="<?php echo $kue->id_kuesioner;?>"
+                            onclick="return confirm('Are you sure you want to delete this kuesioner?')">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </form>
+                </div>
+            </div><!-- /.box-header -->
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <h3><?php echo $kue->kriteria_count;?></h3>
+                    <p>Kriteria</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-document-text"></i>
+                </div>
+                <div class="small-box-footer">
+                    <button name="show_kue_detail" type="button" class="transparent-btn" value="<?php echo $kue->id_kuesioner;?>">
+                        Detail <i class="fa fa-arrow-circle-right"></i>
+                    </button>
+                </div>
+            </div><!-- /.small-box -->
+        </div><!-- /.box-solid -->
+    </div><!-- /.col for kuesioner-x --><?php }}?>
+    
+    <!-- box for Add Kuesioner -->
+    <div class="col-lg-3 col-xs-6">
+        <div class="box box-solid bg-blue">
+            <div class="box-header">
+                <h3 class="box-title">Tambah Kuesioner Baru</h3>
+            </div><!-- /.box-header -->
+            <div class="small-box bg-blue">
+                <div class="inner">
+                    <h3>0</h3>
+                    <p>Kriteria</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-document"></i>
+                </div>
+                <div class="small-box-footer">
+                    <button id="btn-add-kue" type="button" class="transparent-btn">
+                	    Tambah <i class="fa fa-plus-square"></i>
+                    </button>
+                </div>
+            </div><!-- /.small-box -->
+        </div><!-- /.box-solid -->
+    </div><!-- /.col for add new kuesioner -->
+</div><!-- /.row for kuesioner item(s) -->

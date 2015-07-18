@@ -1,0 +1,110 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Kriteria Table</h3>
+                <div class="box-tools">
+                    <div class="pull-right">
+                        <button id="btn-add-kriteria" type="button" class="btn btn-success">
+                            <i class="fa fa-plus"></i> Tambah Baru
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px">#</th>
+                            <th style="width: 180px">Kriteria</th>
+                            <th style="width: 730px">Sub Kriteria</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($kriteriaRs->count () < 1) {
+                            echo "<tr class=\"alert-info\">";
+                            echo "<td colspan=\"4\" class=\"text-center\"><strong>Tidak Ada Data</strong></td>";
+                            echo "</tr>";
+                        } else {
+                            $label_color = array(
+                                "label label-warning",
+                                "label label-info",
+                                "label label-success",
+                                "label label-primary",
+                                "label bg-maroon",
+                                "label bg-teal",
+                                "label bg-aqua",
+                                "label bg-green",
+                                "label bg-yellow",
+                                "label bg-red",
+                                "label bg-blue",
+                                "label bg-purple"
+                            );
+                            for ($sq = $cIdx = 0; $sq < $kriteriaRs->count();) {
+                                $k = $kriteriaRs[$sq++];
+                                if ($sq != 1 && $k->kriteria != $kriteriaRs[$sq-2]->kriteria) {
+                                    $krit_color = $label_color[++$cIdx % count($label_color)];
+                                } else {
+                                    $krit_color = $label_color[$cIdx];
+                                }
+                        ?>
+                        <tr>
+                            <td><?php echo $sq;?></td>
+                            <td><small class="<?php echo $krit_color;?>"><?php echo $k->kriteria;?></small></td>
+                            <td><?php echo $k->sub_kriteria;?></td>
+                            <td>
+                                <input type="hidden" name="id" value="<?php echo $k->id_kriteria;?>">
+								<button type="button" class="btn btn-primary btn-xs btn-upd-kriteria" title="Edit">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-xs btn-del-kriteria" title="Delete">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <?php }}?>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+				<!-- <ul class="pagination pagination-sm no-margin pull-right">
+                    <li><button type="button" class="btn btn-primary" disabled><i class="fa fa-chevron-left"></i></button></li>
+                    <li><button type="button" class="btn btn-default" disabled>1</button></li>
+                    <li><button type="button" class="btn btn-default">2</button></li>
+                    <li><button type="button" class="btn btn-default">3</button></li>
+                    <li><button type="button" class="btn btn-primary"><i class="fa fa-chevron-right"></i></button></li>
+                </ul> -->
+            </div><!-- /.box-footer -->
+        </div><!-- /.box -->
+    </div>
+</div>
+
+<div class="modal fade" id="kriteriaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Tambah Kriteria Baru</h4>
+            </div>
+            <!-- /.modal-header -->
+            <div id="kriteria-modal-body" class="modal-body box box-success" style="margin-bottom: 0px;">
+                <!-- to be filled by jQuery -->
+            </div>
+            <!-- /.modal-body -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    <i class="fa fa-ban"></i> Cancel
+                </button>
+                <button name="action" type="submit" class="btn btn-primary" form="kriteria_form" value="Submit" disabled>
+                    <i class="fa fa-save"></i> Submit
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

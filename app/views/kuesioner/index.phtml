@@ -1,0 +1,65 @@
+<div class="ajax-response"></div>
+<!-- Box for kuesioner detail -->
+<div class="row">
+    <div class="col-xs-12">
+        <div id="kue-detail-box" class="box box-solid" style="display: none;">
+            <div class="box-header bg-purple">
+                <input type="text" name="kue_name" class="input-text-transparent" maxlength="20" onfocus="this.focus();" onclick="this.select();" placeholder="Nama Kuesioner">
+                <div class="box-tools pull-right">
+                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-default btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+                <ul id="kue-krit-list" class="todo-list">
+                    <!-- To be filled by jQuery -->
+                </ul>
+            </div>
+            <!-- /.box-body for kuesioner detail form -->
+            <div class="box-footer clearfix no-border pull-right" style="background-color: transparent;">
+                <button id="btn_add_krit_item" class="btn btn-success"><i class="fa fa-plus"></i> Add item</button>
+                <button id="btn_save_kue" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+            </div>
+        </div><!-- /.box -->
+    </div><!-- /.col for kuesioner detail window -->
+</div><!-- /.row for kuesioner detail window -->
+
+<!-- row for kuesioner list boxes -->
+<div class="row">
+    <div class="col-xs-12">
+        <div id="kue-list-box" class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Daftar Kuesioner</h3>
+            </div>
+            <div class="box-body">
+                <?php $this->partial("kuesioner/listBox");?>
+            </div><!-- /.body for kuesioner list box -->
+            <div class="box-footer clearfix no-border pull-right" style="background-color: transparent;">
+                <button type="button" class="btn btn-primary refresh-btn"><i class="fa fa-refresh"></i> Refresh</button>
+            </div>
+        </div><!-- /.box for kuesioner list -->
+    </div><!-- /.col for bottom row -->
+</div><!-- /.row bottom -->
+
+<div id="krit-list-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Pilih Kriteria Yang Ingin Disisipkan</h4>
+            </div>
+            <!-- /.modal-header -->
+            <div id="krit-list-modal-body" class="modal-body box box-success" style="margin-bottom: 0px;">
+                <!-- to be filled by jQuery -->
+            </div><!-- /.modal-body -->
+            <div class="modal-footer">
+                <button name="confirm_button" type="button" class="btn btn-success" data-dismiss="modal">
+                    <i class="fa fa-check"></i> OK
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

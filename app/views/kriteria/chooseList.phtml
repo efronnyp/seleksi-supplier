@@ -1,0 +1,29 @@
+<?php if (isset($kriteriaRs)) {?>
+<div class="table-responsive">
+	<table id="krit-choose-table" class="table table-hover">
+		<thead>
+			<tr>
+				<th style="width: 30px"><i class="fa fa-check-square-o"></i></th>
+				<th style="width: 180px">Kriteria</th>
+				<th>Sub Kriteria</th>
+			</tr>
+		</thead>
+		<tbody><?php if ($kriteriaRs->count() < 1) {?>
+
+            <tr class="alert-info">
+				<td colspan="3">Tabel Kriteria Masih Kosong, Atau Seluruh Kriteria
+					Sudah Dimasukkan Ke Dalam Kuesioner Ini.</td>
+			</tr><?php } else { foreach ($kriteriaRs as $k) {?>
+
+            <tr class="link-row">
+				<td><input type="checkbox" value="<?php echo $k->id_kriteria;?>"> <input
+					name="krit_id" type="hidden" value="<?php echo $k->id_kriteria;?>">
+				</td>
+				<td><?php echo $k->kriteria;?></td>
+				<td><?php echo $k->sub_kriteria;?></td>
+			</tr><?php }}?>
+
+        </tbody>
+	</table>
+</div>
+<?php }?>

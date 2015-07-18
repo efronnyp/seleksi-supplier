@@ -1,0 +1,26 @@
+<?php
+if ($this->flashSession->has()) {
+    echo $this->flashSession->output();
+} else {
+?>
+<form id="kriteria_form" action="kriteria/update" method="post" autocomplete="off" class="form-horizontal" role="form">
+    <div class="form-group">
+        <label class="control-label col-md-2" for="id" style="padding-right: 5px;">Id:</label>
+        <div class="col-sm-2">
+            <input name="data[id]" type="text" maxlength="5" class="form-control" value="<?php echo $data["id"];?>" disabled>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-2" for="kriteria" style="padding-right: 5px;">Kriteria:</label>
+        <div class="col-sm-9">
+            <input name="data[kriteria]" type="text" class="form-control" placeholder="Masukkan Kriteria" value="<?php echo $data["kriteria"];?>" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-2" for="sub_kriteria" style="padding-right: 5px;">Sub Kriteria:</label>
+        <div class="col-sm-9">
+            <input name="data[sub_kriteria]" type="text" class="form-control" placeholder="Masukkan Sub Kriteria" value="<?php echo $data["sub_kriteria"];?>">
+        </div>
+    </div>
+</form>
+<?php }?>
