@@ -20,7 +20,7 @@
     background: url('/img/loading1.gif') 50% 50% no-repeat;
 }
 .preloader-img2 {
-	background: url('/img/loading2.gif') 50% 50% no-repeat;
+    background: url('/img/loading2.gif') 50% 50% no-repeat;
 }
 .preloader-holder {
     height: 128px;

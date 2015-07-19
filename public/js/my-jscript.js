@@ -1,3 +1,10 @@
+/*
+ * Written by: Efronny Pardede (Jul 2015)
+ * Version   : v1.0
+ * 
+ * Please do not modify any single part or whole of this document without prior permission from Inferno Technology Community.
+ */
+
 /**
  * Alert method to costumize alert div
  */
@@ -10,18 +17,16 @@
     		var $alert = $(this);
     		$alert.prepend(btn);
     		$alert.wrap("<div class=\"alert-wrapper\"></div>");
-    		
-    		//$alert.each(function () {
-    			if ($(this).hasClass("alert-success")) {
-    				$(this).prepend("<i class=\"fa fa-check\"></i>");
-    			} else if ($(this).hasClass("alert-warning")) {
-    				$(this).prepend("<i class=\"fa fa-warning\"></i>");
-    			} else if ($(this).hasClass("alert-info")) {
-    				$(this).prepend("<i class=\"fa fa-info\"></i>");
-    			} else if ($(this).hasClass("alert-danger")) {
-    				$(this).prepend("<i class=\"fa fa-ban\"></i>");
-    			}
-    		//});
+
+			if ($(this).hasClass("alert-success")) {
+				$(this).prepend("<i class=\"fa fa-check\"></i>");
+			} else if ($(this).hasClass("alert-warning")) {
+				$(this).prepend("<i class=\"fa fa-warning\"></i>");
+			} else if ($(this).hasClass("alert-info")) {
+				$(this).prepend("<i class=\"fa fa-info\"></i>");
+			} else if ($(this).hasClass("alert-danger")) {
+				$(this).prepend("<i class=\"fa fa-ban\"></i>");
+			}
     		
     		$(".close").click(function () {
     			$(this).closest(".alert-wrapper").slideUp();

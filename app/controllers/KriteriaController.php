@@ -131,7 +131,14 @@ class KriteriaController extends ControllerBase
                 $this->flashSession->error("Fatal Error! Unable to find the requested kriteria");
                 return;
             }
-            if (!$kriteria->delete()) {
+            
+            if (!empty(KuesionerChain::findFirstByIdKriteria($id))) {
+                $result = $kriteria->setActive(false)->save();
+            } else {
+                $result = $kriteria->delete();
+            }
+            
+            if (!$result) {
                 $this->flashSession->error("Fatal Error! Unable to delete the requested kriteria record");
                 foreach ($kriteria->getMessages() as $err) {
                     $this->flashSession->error($err);

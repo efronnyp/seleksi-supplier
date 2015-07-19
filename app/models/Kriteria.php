@@ -2,7 +2,7 @@
 
 class Kriteria extends \Phalcon\Mvc\Model
 {
-    
+
     /**
      *
      * @var integer
@@ -201,4 +201,5 @@ class Kriteria extends \Phalcon\Mvc\Model
             ->getQuery()
             ->getSingleResult();
     }
+
 }

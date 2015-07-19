@@ -12,6 +12,8 @@ use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
+use Phalcon\Dispatcher;
+use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
@@ -84,13 +86,53 @@ $di->setShared('session', function () {
  */
 $di->set('router', function () {
     $router = new Phalcon\Mvc\Router();
+    // Route root to HomeController
     $router->add("/", array(
         'controller' => 'home',
+        'action' => 'index'
+    ));
+    // Route login to AuthController
+    $router->add("/login", array(
+        'controller' => 'auth',
         'action' => 'index'
     ));
     
     return $router;
 });
+
+/**
+ * Set dispatcher's events manager to catch either Dispatcher::EXCEPTION_HANDLER_NOT_FOUND or Dispatcher::EXCEPTION_ACTION_NOT_FOUND
+ */
+$di->set('dispatcher', function () use ($di) {
+
+    // Get an EventsManager
+    $evManager = $di->getShared('eventsManager');
+
+    // Attach a listener
+    $evManager->attach("dispatch:beforeException", function($event, $dispatcher, $exception) {
+
+        // Handle 404 exceptions
+        if ($event->getType() == 'beforeException') {
+            switch ($exception->getCode()) {
+                case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
+                case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
+                    $dispatcher->forward(array(
+                        'controller' => 'error',
+                        'action'     => 'show404'
+                    ));
+                    return false;
+            }
+        }
+    });
+
+    $dispatcher = new MvcDispatcher();
+
+    //Bind the EventsManager to the dispatcher
+    $dispatcher->setEventsManager($evManager);
+
+    return $dispatcher;
+
+}, true);
 
 /**
  * Register the flash service with custom CSS classes
