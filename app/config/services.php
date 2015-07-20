@@ -14,6 +14,7 @@ use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Dispatcher;
 use Phalcon\Mvc\Dispatcher as MvcDispatcher;
+use Phalcon\Security;
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
@@ -82,6 +83,19 @@ $di->setShared('session', function () {
 });
 
 /**
+ * Re-register security to setup custom options
+ */
+$di->set('security', function() {
+
+    $security = new Security();
+
+    //Set the password hashing factor to 12 rounds
+    $security->setWorkFactor(12);
+
+    return $security;
+}, true);
+
+/**
  * Register default router
  */
 $di->set('router', function () {
@@ -101,7 +115,7 @@ $di->set('router', function () {
 });
 
 /**
- * Set dispatcher's events manager to catch either Dispatcher::EXCEPTION_HANDLER_NOT_FOUND or Dispatcher::EXCEPTION_ACTION_NOT_FOUND
+ * Configure dispatcher
  */
 $di->set('dispatcher', function () use ($di) {
 

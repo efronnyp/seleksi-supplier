@@ -11,7 +11,7 @@ class ControllerBase extends Controller
      */
     public function beforeExecuteRoute($dispatcher)
     {
-        if (!empty($auth = $this->session->get("auth"))) {
+        if (empty($auth = $this->session->get("auth"))) {
             $this->response->redirect("login");
             return false; // Signal dispatcher to halt active operation 
         }

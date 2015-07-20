@@ -73,10 +73,10 @@ $(document).on("click", "#btn-add-kue", function () {
  * Register onclick event for kuesioner detail button
  */
 $(document).on("click", "button[name='show_kue_detail']", function () {
-	preloader("#kue-list-box .box-body");
+	preloader("#kue-list-box");
 	$("#kue-list-box .refresh-btn").attr("disabled", "disabled");
 	$.post("/kuesioner/detail", { kue_id: $(this).val() }, function (data) {
-		preloader_done("#kue-list-box .box-body");
+		preloader_done("#kue-list-box");
 		$("#kue-list-box .refresh-btn").removeAttr("disabled");
 		var jObj = JSON.parse(data);
 		

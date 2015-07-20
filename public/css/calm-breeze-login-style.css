@@ -18,6 +18,8 @@
 
 /*
  * Modified by Efronny Pardede (Inferno Technology Community)
+ *
+ * NB: Some parts was copied from bootstrap styles
  */
 @import url(googleapis/Source-Sans-Pro.css);
 * {
@@ -72,9 +74,9 @@ body :-ms-input-placeholder {
   transform-style: preserve-3d;
 }
 .wrapper.form-success .container h1 {
-  -webkit-transform: translateY(85px);
-      -ms-transform: translateY(85px);
-          transform: translateY(85px);
+  -webkit-transform: translateY(75px);
+      -ms-transform: translateY(75px);
+          transform: translateY(75px);
 }
 .container {
   max-width: 600px;
@@ -89,8 +91,8 @@ body :-ms-input-placeholder {
   font-size: 40px;
   -webkit-transition-duration: 1s;
           transition-duration: 1s;
-  -webkit-transition-timing-function: ease-in-put;
-          transition-timing-function: ease-in-put;
+  -webkit-transition-timing-function: ease-in-out;
+          transition-timing-function: ease-in-out;
   font-weight: 200;
 }
 form {
@@ -143,6 +145,15 @@ form button {
 }
 form button:hover {
   background-color: #f5f7f9;
+}
+.has-error input {
+  border-color: #843534;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+}
+.has-error label {
+	color: #d9534f;
+	font-weight: 400;
 }
 .bg-bubbles {
   position: absolute;
@@ -233,6 +244,17 @@ form button:hover {
   height: 160px;
   -webkit-animation-delay: 11s;
           animation-delay: 11s;
+}
+.preloader-img {
+  position: absolute;
+  top: 55%;
+  height: 70px;
+  width: 100%;
+  background: url('/img/loading1-white.gif') 50% 50% no-repeat;
+  opacity: 0;
+}
+.wrapper.form-success .container .preloader-img {
+  opacity: 1;
 }
 @-webkit-keyframes square {
   0% {
