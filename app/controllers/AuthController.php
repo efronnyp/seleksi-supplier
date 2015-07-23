@@ -21,12 +21,30 @@ class AuthController extends Controller
             !empty($login_name = $this->request->getPost("username")) &&
             !empty($password = $this->request->getPost("password")))
         {
-            $user = Users::findFirstByLoginName($login_name);
+            $user = Users::findFirst(array(
+                "login_name = :login_name: AND active = true",
+                "bind" => array("login_name" => $login_name)
+            ));
+            
             if (empty($user)) {
                 echo json_encode(array(
                     "success" => false,
                     "errorType" => "username",
                     "errorMessage" => "Username tidak dikenal"
+                ));
+                return;
+            } else if ($user->isBanned()) {
+                echo json_encode(array(
+                    "success" => false,
+                    "errorType" => "username",
+                    "errorMessage" => "Username ini tidak dapat digunakan kembali"
+                ));
+                return;
+            } else if ($user->isSuspended()) {
+                echo json_encode(array(
+                        "success" => false,
+                        "errorType" => "username",
+                        "errorMessage" => "Untuk sementara, username ini tidak dapat digunakan"
                 ));
                 return;
             }
@@ -41,7 +59,8 @@ class AuthController extends Controller
             }
             
             $this->session->set("auth", array(
-                "user" => $user
+                "user" => $user,
+                "role" => Roles::findFirstByIdRole($user->getIdRole())
             ));
             echo json_encode(array("success" => true));
         }
@@ -49,8 +68,7 @@ class AuthController extends Controller
 
     public function logoutAction()
     {
-        $this->session->remove("auth");
-        $this->flashSession->success("You've been logged out successfully.");
+        $this->session->destroy();
         return $this->response->redirect("login");
     }
 

@@ -48,9 +48,20 @@
     text-decoration: none;
     cursor: pointer;
 }
-.transparent-btn {
+.transparent-btn,
+.transparent-btn button {
     background-color: transparent;
     border: none;
     outline: none;
+}
+.full-width {
     width: 100%;
+}
+.actions-btn {
+    display: none;
+}
+.actions-btn:hover,
+table tr:hover > td .actions-btn,
+table tbody tr:hover > td .actions-btn {
+    display: inline-block;
 }

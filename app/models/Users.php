@@ -27,6 +27,12 @@ class Users extends \Phalcon\Mvc\Model
      *
      * @var string
      */
+    protected $company_name;
+
+    /**
+     *
+     * @var string
+     */
     protected $email;
 
     /**
@@ -100,6 +106,19 @@ class Users extends \Phalcon\Mvc\Model
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field company_name
+     *
+     * @param string $company_name
+     * @return $this
+     */
+    public function setCompanyName($company_name)
+    {
+        $this->company_name = $company_name;
 
         return $this;
     }
@@ -226,6 +245,16 @@ class Users extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Returns the value of field company_name
+     *
+     * @return string
+     */
+    public function getCompanyName()
+    {
+        return $this->company_name;
+    }
+
+    /**
      * Returns the value of field email
      *
      * @return string
@@ -270,7 +299,7 @@ class Users extends \Phalcon\Mvc\Model
      *
      * @return integer
      */
-    public function getBanned()
+    public function isBanned()
     {
         return $this->banned;
     }
@@ -280,7 +309,7 @@ class Users extends \Phalcon\Mvc\Model
      *
      * @return integer
      */
-    public function getSuspended()
+    public function isSuspended()
     {
         return $this->suspended;
     }
@@ -323,7 +352,7 @@ class Users extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->belongsTo('id_role', 'Role', 'id_role', array('alias' => 'Role'));
+        $this->belongsTo('id_role', 'Roles', 'id_role', array('alias' => 'Roles'));
     }
 
     /**

@@ -110,6 +110,11 @@ $di->set('router', function () {
         'controller' => 'auth',
         'action' => 'index'
     ));
+    // Route responden to UserController
+    $router->add("/responden", array(
+        'controller' => 'user',
+        'action' => 'index'
+    ));
     
     return $router;
 });
