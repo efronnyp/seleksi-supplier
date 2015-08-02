@@ -340,7 +340,7 @@ class Users extends \Phalcon\Mvc\Model
             )
         );
 
-        if ($this->validationHasFailed() == true) {
+        if (!empty($this->getEmail()) && $this->validationHasFailed() == true) {
             return false;
         }
 

@@ -1,0 +1,40 @@
+<?php if (isset($responden)) { ?>
+<h3 style="padding-left: 10px">Daftar Responden</h3>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th style="width: 30px"><i class="fa fa-check-square-o"></i></th>
+            <th style="width: 230px">Nama</th>
+            <th style="width: 220px">Perusahaan</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody><?php if (count($responden) < 1) { ?>
+
+        <tr class="info">
+            <td class="text-center" colspan="4">Belum ada responden yang terdaftar.</td>
+        </tr><?php } else { foreach ($responden as $r) { ?>
+
+        <tr class="link-row">
+            <td>
+                <input type="checkbox"<?php if ($r["selected"]) echo " checked"; ?> value="<?php echo $r["id_responden"]; ?>">
+            </td>
+            <td><?php echo $r["name"]; ?></td>
+            <td><?php echo $r["company"]; ?></td>
+            <td><?php
+                    switch ($r["status"]) {
+                        case 'N':
+                            echo "<small class=\"label label-warning\">Belum Diisi</small>";
+                            break;
+                        case 'S':
+                            echo "<small class=\"label label-success\">Sudah Diisi</small>";
+                            break;
+                        default:
+                            echo "<small class=\"label label-default\">Tidak Dipilih</small>";
+                    } 
+                ?></td>
+        </tr><?php }} ?>
+
+    </tbody>
+</table>
+<?php } ?>

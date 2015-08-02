@@ -4,7 +4,8 @@
     <div class="col-xs-12">
         <div id="kue-detail-box" class="box box-solid" style="display: none;">
             <div class="box-header bg-purple">
-                <input type="text" name="kue_name" class="input-text-transparent" maxlength="20" onfocus="this.focus();" onclick="this.select();" placeholder="Nama Kuesioner">
+                <input type="text" name="kue_name" class="input-text-transparent" maxlength="20" onfocus="this.focus();"
+                    onclick="this.select();" placeholder="Nama Kuesioner" <?php if ($responden) echo "readonly"; ?>>
                 <div class="box-tools pull-right">
                     <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-default btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -12,14 +13,32 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
+<?php if ($responden) { ?>
+                <form id="kriteria_score_form" action="kuesioner/respondenSubmit" method="post" autocomplete="off" role="form">
+<?php } ?>
+                <input name="detail_kue_id" type="hidden">
                 <ul id="kue-krit-list" class="todo-list">
                     <!-- To be filled by jQuery -->
                 </ul>
+<?php if ($responden) { ?>
+                </form>
+<?php } else { ?>
+                <div id="responden-list-wrapper" style="padding-bottom: 10px;">
+                    <!-- To be filled by jQuery -->
+                </div>
+<?php } ?>
             </div>
             <!-- /.box-body for kuesioner detail form -->
             <div class="box-footer clearfix no-border pull-right" style="background-color: transparent;">
+<?php if ($responden) { ?>
+                <button id="btn_submit_kue" type="submit" form="kriteria_score_form" class="btn btn-primary"
+                    onclick="return confirm('Apakah anda yakin telah mengisi kuesioner ini dengan benar? Anda tidak dapat merubah nilai pada kuesioner ini lagi setelah anda submit.');">
+                    <i class="fa fa-save"></i> Save
+                </button>
+<?php } else { ?>
                 <button id="btn_add_krit_item" class="btn btn-success"><i class="fa fa-plus"></i> Add item</button>
                 <button id="btn_save_kue" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+<?php } ?>
             </div>
         </div><!-- /.box -->
     </div><!-- /.col for kuesioner detail window -->
@@ -42,6 +61,7 @@
     </div><!-- /.col for bottom row -->
 </div><!-- /.row bottom -->
 
+<?php if (!$responden) { ?>
 <div id="krit-list-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -63,3 +83,4 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+<?php } ?>

@@ -1,10 +1,10 @@
 <div class="row">
     <div class="col-xs-12">
-        <div class="box box-info">
+        <div id="responden-box" class="box box-info">
             <div class="box-header">
                 <h3 class="box-title">Tabel Responden</h3>
                 <div class="box-tools pull-right">
-                    <button id="btn-add-kriteria" type="button" class="btn btn-info" title="Tambah Responden Baru">
+                    <button id="btn-add-responden" type="button" class="btn btn-info" title="Tambah Responden Baru">
                         <i class="fa fa-user-plus"></i> Tambah Baru
                     </button>
                 </div>
@@ -16,37 +16,64 @@
                         <tr>
                             <th style="width: 40px">#</th>
                             <th style="width: 150px">Username</th>
-                            <th style="width: 300px">Nama</th>
-                            <th style="width: 300px">Email</th>
-                            <th>Keterangan</th>
-                            <th>&nbsp;</th>
+                            <th style="width: 230px">Nama</th>
+                            <th style="width: 220px">Perusahaan</th>
+                            <th style="width: 240px">Email</th>
+                            <th style="width: 110px">Keterangan</th>
+                            <th style="width: 90px">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="success">
-                            <td>1</td>
-                            <td>Ulala</td>
-                            <td>Eulala Lala Ulala</td>
-                            <td>laulala@ul.com</td>
-                            <td>Active</td>
+                    <tbody><?php if ($respondenRs->count() < 1) { ?>
+
+                        <tr class="info text-center">
+                            <td colspan="7">
+                                Belum ada responden yang terdaftar. 
+                                Klik tombol "<i class="fa fa-user-plus"></i> Tambah Baru" untuk menambah responden.
+                            </td>
+                        </tr><?php } else {
+                                      for ($i = 0; $i < $respondenRs->count(); ) {
+                                          $r = $respondenRs[$i++]; ?>
+
+                        <tr class="<?php echo $r->isBanned() ? "danger" : $r->isSuspended() ? "warning" : "success" ?>">
+                            <td><?php echo $i; ?></td>
+                            <td><?php echo $r->getLoginName(); ?></td>
+                            <td><?php echo $r->getName(); ?></td>
+                            <td><?php echo $r->getCompanyName(); ?></td>
+                            <td><?php echo $r->getEmail(); ?></td>
+                            <td><?php echo $r->isBanned() ? "Banned" : $r->isSuspended() ? "Suspended" : "Active" ?></td>
                             <td>
-                                <div class="actions-btn transparent-btn">
-                                    <button style="color: #f0ad4e">
+                                <div class="action-btn transparent-btn">
+                                    <form id="action_form" action="user/flag" method="post">
+                                        <input name="user_id" type="hidden" value="<?php echo $r->getIdUser(); ?>">
+                                    </form>
+                                    <button name="suspend" type="submit" form="action_form" style="color: #f0ad4e;" value="s">
                                         <i class="ion ion-pause" title="Suspend"></i>
                                     </button>
-                                    <button style="color: #d43f3a">
+                                    <button name="ban" type="submit" form="action_form" style="color: #d43f3a;" value="b">
                                         <i class="fa fa-ban" title="Ban"></i>
                                     </button>
-                                    <button style="color: #d43f3a">
+                                    <button name="delt" type="submit" form="action_form" style="color: #d43f3a" value="x">
                                         <i class="fa fa-user-times" title="Delete"></i>
                                     </button>
                                 </div>
                             </td>
-                        </tr>
+                        </tr><?php }} ?>
                     </tbody>
                 </table>
             </div><!-- /.box-body -->
 
-        </div>
-    </div>
-</div>
+            <div class="box-footer pull-right" style="display: none; background: transparent;">
+                <a href="responden" class="btn btn-danger">
+                    <i class="fa fa-ban"></i> Cancel
+                </a>
+                <button type="reset" form="user_form" class="btn btn-warning">
+                    <i class="fa fa-refresh"></i> Reset
+                </button>
+                <button name="action" type="submit" form="user_form" class="btn btn-primary" value="Add">
+                    <i class="fa fa-save"></i> Simpan
+                </button>
+            </div><!-- /.box-footer -->
+
+        </div><!-- /.box #responden-box -->
+    </div><!-- /.col -->
+</div><!-- /.row -->

@@ -4,6 +4,14 @@
         <span>Home</span>
     </a>
 </li>
+<?php if ($responden) { ?>
+<li>
+    <a href="kuesioner">
+        <i class="fa fa-file-text-o fa-fw"></i>
+        <span>Kuesioner</span>
+    </a>
+</li>
+<?php } else { ?>
 <li class="treeview">
     <a href="#">
         <i class="fa fa-wrench fa-fw"></i>
@@ -16,3 +24,4 @@
         <li><a href="responden"><i class="fa fa-chevron-right"></i> Responden</a></li>
     </ul>
 </li>
+<?php } ?>

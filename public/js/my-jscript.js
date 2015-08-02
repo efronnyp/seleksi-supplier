@@ -6,17 +6,18 @@
  */
 
 /**
- * Alert method to costumize alert div
+ * Define alert() method
  */
 (function ($) {
     "use strict";
 
     $.fn.alert = function () {
     	return this.each(function () {
-    		var btn = "<button type=\"button\" class=\"close\"><span aria-hidden=\"true\">&times;</span></button>";
-    		var $alert = $(this);
-    		$alert.prepend(btn);
-    		$alert.wrap("<div class=\"alert-wrapper\"></div>");
+    		var btn = $("<button type=\"button\" class=\"close\"><span aria-hidden=\"true\">&times;</span></button>");
+    		if ($(this).children(btn).length) return; //Skip if already processed
+    		
+    		$(this).prepend(btn);
+    		$(this).wrap("<div class=\"alert-wrapper\"></div>");
 
 			if ($(this).hasClass("alert-success")) {
 				$(this).prepend("<i class=\"fa fa-check\"></i>");
@@ -27,17 +28,17 @@
 			} else if ($(this).hasClass("alert-danger")) {
 				$(this).prepend("<i class=\"fa fa-ban\"></i>");
 			}
-    		
-    		$(".close").click(function () {
-    			$(this).closest(".alert-wrapper").slideUp();
-    		});
+			
+			$(".close").click(function () {
+				$(this).closest(".alert-wrapper").slideUp();
+			});
     	});
     };
 
 })(jQuery);
 
 $(document).on("click", "[data-list-item='remove']", function () {
-	$(this).parents("li").first().detach().remove();
+	$(this).parents("li").first().remove();
 	if ($("#kue-krit-list").children("li").length < 1) {
 		$("#kue-krit-list").addClass("empty-list").html(
 				"<li>" +
@@ -63,59 +64,69 @@ $(document).on("click", "#btn-add-kue", function () {
 			"</div>" +
 			"</div>" +
 			"</li>");
-	//Show and expand kuesioner detail box
-	showAndExpandBox($("#kue-detail-box"));
-	$("input[name=\"kue_name\"]").focus();
+	//Load responden list
+	$("#btn_save_kue").attr("disabled", "disabled");
+	$("#responden-list-wrapper").load("/kuesioner/respondenList", { kue_id: 0 }, function () {
+		$("#btn_save_kue").removeAttr("disabled");
+		//Show and expand kuesioner detail box
+		showAndExpandBox($("#kue-detail-box"));
+		$("input[name=\"kue_name\"]").focus();
+	});
 	$("#btn_save_kue").val("Add");
+});
+
+/**
+ * Trigger .link-row class 
+ */
+$(document).on("click", "tr.link-row td:not(:first-child)", function () {
+	var ele = $(this).parent().find("td:first-child input:checkbox");
+	ele.trigger( "click" );
 });
 
 /**
  * Register onclick event for kuesioner detail button
  */
 $(document).on("click", "button[name='show_kue_detail']", function () {
+	var kue_id = $(this).val();
+	$("input[name='detail_kue_id']").val(kue_id);
 	preloader("#kue-list-box");
 	$("#kue-list-box .refresh-btn").attr("disabled", "disabled");
-	$.post("/kuesioner/detail", { kue_id: $(this).val() }, function (data) {
-		preloader_done("#kue-list-box");
-		$("#kue-list-box .refresh-btn").removeAttr("disabled");
-		var jObj = JSON.parse(data);
-		
-		if (jObj.success) {
-			$("input[name=\"kue_name\"]").val(jObj.kue_name);
-			//Sanitize kuesioner kriteria item list first
-			$("#kue-krit-list").removeClass("empty-list").empty();
+	$.post("/kuesioner/detail", { kue_id: kue_id }, function (data) {
+		if ($(data).hasClass("alert-danger") == false) {
+			$("#kue-krit-list").removeClass("empty-list").html(data);
+			var kue_name = $("#kue-krit-list input[name=\"kue_name\"]");
+			$("input[name=\"kue_name\"]").val(kue_name.val());
+			kue_name.remove();
 			
-			for (var i = 0; i < jObj.kriteria_items.length; i++) {
-				$("#kue-krit-list").append(
-						"<li>" +
-						"<span class=\"handle\">" +
-                        "<i class=\"fa fa-ellipsis-v\"></i>\n" +
-                        "<i class=\"fa fa-ellipsis-v\"></i>" +
-                        "</span>" +
-                        "<span class=\"text\">" + jObj.kriteria_items[i].sub_kriteria + "</span>" +
-                        "<small class=\"label label-success\">" +
-                        "<i class=\"fa fa-tag\"></i> " + jObj.kriteria_items[i].kriteria +
-                        "</small>" +
-						"<input name=\"krit_id\" type=\"hidden\" value=\"" + jObj.kriteria_items[i].id_kriteria + "\">" +
-                        "<div class=\"tools\">" +
-                        "<button type=\"button\" data-list-item=\"remove\" class=\"transparent-btn\">" +
-                        "<i class=\"fa fa-trash-o\" title=\"Delete\"></i>" +
-                        "</button>" +
-                        "</div>" +
-						"</li>");
+			if ($("#responden-list-wrapper").length) {
+				//Load responden list
+				$("#btn_save_kue").attr("disabled", "disabled");
+				$("#responden-list-wrapper").load("/kuesioner/respondenList", { kue_id: kue_id }, function () {
+					$("#btn_save_kue").removeAttr("disabled");
+					preloader_done("#kue-list-box");
+					$("#kue-list-box .refresh-btn").removeAttr("disabled");
+					//Show and expand kuesioner detail box
+					showAndExpandBox($("#kue-detail-box"));
+				});
+				
+				$("#btn_save_kue").val("Update");
+			} else {
+				if (!!$("input[name=\"krit_weight[]\"]:first").attr("disabled")) {
+					$("#btn_submit_kue").css("display", "none");
+				} else {
+					$("#btn_submit_kue").css("display", "");
+				}
+				
+				preloader_done("#kue-list-box");
+				$("#kue-list-box .refresh-btn").removeAttr("disabled");
+				//Show and expand kuesioner detail box
+				showAndExpandBox($("#kue-detail-box"));
 			}
-			
-			$("#btn_save_kue").val("Update");
-			//Show and expand kuesioner detail box
-			showAndExpandBox($("#kue-detail-box"));
 		} else {
+			preloader_done("#kue-list-box");
+			$("#kue-list-box .refresh-btn").removeAttr("disabled");
 			$("#kue-detail-box").css("display", "none");
-			var holder = $(".ajax-response").empty();
-			var alert = $("<div class=\"alert alert-danger\"></div>");
-			
-			for (var i = 0; i < jObj.messages.length; i++) {
-				holder.append(alert.append(jObj.messages[i]));
-			}
+			$(".ajax-response").html(data);
 			$(".alert").alert();
 		}
 	});
@@ -127,26 +138,6 @@ $(document).ready(function() {
 	 * Register every alert class as alert
 	 */
 	$(".alert").alert();
-		/*var btn = "<button type=\"button\" class=\"close\"><span aria-hidden=\"true\">&times;</span></button>";
-		var $alert = $(".alert");
-		$alert.prepend(btn);
-		$alert.wrap("<div class=\"alert-wrapper\"></div>");
-		
-		$alert.each(function () {
-			if ($(this).hasClass("alert-success")) {
-				$(this).prepend("<i class=\"fa fa-check\"></i>");
-			} else if ($(this).hasClass("alert-warning")) {
-				$(this).prepend("<i class=\"fa fa-warning\"></i>");
-			} else if ($(this).hasClass("alert-info")) {
-				$(this).prepend("<i class=\"fa fa-info\"></i>");
-			} else if ($(this).hasClass("alert-danger")) {
-				$(this).prepend("<i class=\"fa fa-ban\"></i>");
-			}
-		});
-		
-		$(".close").click(function () {
-			$(this).closest(".alert-wrapper").slideUp();
-		});*/
 	
 	/**
 	 * Treat kuesioner list box as boxRefresh
@@ -192,11 +183,6 @@ $(document).ready(function() {
 			$.post("/kriteria/chooseList", { exclude: exclude_krit_id }, function (data) {
 				$("#krit-list-modal-body").html(data);
 				$("#krit-list-modal .modal-footer button[name=\"confirm_button\"]").removeAttr("disabled");
-				//Toggle checkbox in kriteria choose list table, on row clicked
-				$("#krit-choose-table tr.link-row td:not(:first-child)").click(function () {
-					var ele = $(this).prevAll().children("input:checkbox");
-					ele.trigger( "click" );
-				});
 			});
 		});
 	}
@@ -205,8 +191,10 @@ $(document).ready(function() {
 	 * Save kuesioner button onclick event
 	 */
 	$("#btn_save_kue").click(function () {
+		var kue_id = $("input[name=\"detail_kue_id\"]").val();
 		var kue_name = $("input[name=\"kue_name\"]").length ? $("input[name=\"kue_name\"]").val() : "";
 		var krit_ids = $("#kue-krit-list li input[name=\"krit_id\"]");
+		var responden_list = $("#responden-list-wrapper table tr td:first-child input:checkbox:checked");
 		
 		if (kue_name.length < 1) {
 			alert('Nama Kuesioner Harus Diisi Terlebih Dahulu');
@@ -215,17 +203,22 @@ $(document).ready(function() {
 			alert('Belum Ada Kriteria yang Dipilih Untuk Kuesioner Ini. Mohon Klik Tombol Add Item Untuk Menambahkan Kirteria.');
 		} else {
 			var krit_ids_val = krit_ids.map(function() {return $(this).val();}).get();
-			var data = {kue_name: kue_name, krit_ids: krit_ids_val};
+			var chosen_responden = [];
+			if (responden_list.length) {
+				chosen_responden = responden_list.map(function() {return $(this).val()}).get();
+			}
+			var data = {kue_name: kue_name, krit_ids: krit_ids_val, chosen_responden: chosen_responden};
 			var action = $(this).val();
 			$("#btn_add_krit_item, #btn_save_kue").attr("disabled", "disabled");
 			preloader("#kue-detail-box", 2);
 			//Time to send POST data to server. Wish me luck!
-			$.post("/kuesioner/update", { data: data, action: action }, function (data) {
+			$.post("/kuesioner/update", { kue_id: kue_id, data: data, action: action }, function (data) {
 				$("#btn_add_krit_item, #btn_save_kue").removeAttr("disabled");
 				preloader_done("#kue-detail-box", 2);
 				$(".ajax-response").html(data);
 				$(".alert").alert();
-				if ($(".ajax-response .alert-success").length) {
+				if ($(".ajax-response .alert-success").length && action === "Add") {
+					$("input[name='detail_kue_id']").val(-1);
 					$("#btn_save_kue").val("Update");
 				}
 				$("#kue-list-box .refresh-btn").click();
@@ -266,11 +259,23 @@ $(document).ready(function() {
 			});
 		}
 	});
+	
+	/**
+	 * Onclick listener for add respondent button
+	 */
+	$("#btn-add-responden").click(function () {
+		var bh = $("#responden-box").children(".box-header");
+		bh.find(".box-title").html("Tambah Responden");
+		bh.children(".box-tools").remove();
+		$("#responden-box").children(".box-body").removeClass("table-responsive").removeClass("no-padding").load("/user/form", function(){
+			$("#responden-box").children(".box-footer").css("display", "");
+		});
+	});
 
 });
 
 /**
- * Register getKriteriaForm function()
+ * Call this function to show kriteria modal (used only on kriteria page)
  */
 function showKriteriaModal(id) {
 	$("#kriteria-modal-body").html("<div class=\"preloader-holder\"></div>");
@@ -317,7 +322,7 @@ function preloader_done(eId, imgn) {
  * Use this function to check whether the box is closed?
  */
 function isBoxClosed(box) {
-	return box.css("display") == "none";
+	return box.css("display") === "none";
 }
 
 /**

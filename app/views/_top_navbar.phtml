@@ -99,8 +99,8 @@
                     <li class="user-header bg-light-blue">
                         <img src="img/avatar3.png" class="img-circle" alt="User Image" />
                         <p>
-                            <?php echo $user->getName(); ?>
-                            <small><?php echo $role->getName(); ?></small>
+                            <?php echo $user->getName()." - ".$role->getName(); ?>
+                            <small><?php echo $user->getCompanyName(); ?></small>
                         </p>
                     </li>
                     <!-- Menu Body -->

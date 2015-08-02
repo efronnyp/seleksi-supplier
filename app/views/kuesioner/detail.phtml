@@ -1,0 +1,42 @@
+<?php
+      if ($this->flashSession->has()) {
+          echo $this->flashSession->output();
+      } else if (isset($result)) {
+?>
+<input name="kue_name" type="hidden" value="<?php echo $result["kue_name"]; ?>">
+<?php
+          for ($i = 0; $i < count($result["kriteria_items"]); $i++) {
+              $r = $result["kriteria_items"][$i];
+?>
+<li>
+<?php         if ($responden) { ?>
+    <span class="hover-rotate">
+        <i class="fa fa-thumb-tack"></i>
+    </span>
+    <input name="krit_weight[]" type="number" min="1" max="10" style="margin-left: 10px; padding: 1px 3px; text-align: center; width: 40px;"
+        placeholder="Nilai" class="no-spinner" value="<?php if (isset($r["weight"])) echo $r["weight"]; ?>"
+        <?php if (isset($result["readonly"])) echo "disabled"; ?> required>
+<?php         } else { ?>
+    <span class="handle">
+        <i class="fa fa-ellipsis-v"></i>
+        <i class="fa fa-ellipsis-v"></i>
+    </span>
+<?php         } ?>
+    <span class="text"><?php echo $r["sub_kriteria"]; ?></span>
+    <small class="label label-success">
+        <i class="fa fa-tag"></i> <?php echo $r["kriteria"]; ?>
+    </small>
+    <input name="<?php echo $responden ? "kue_krit_id[]" : "krit_id" ?>" type="hidden"
+        value="<?php echo $responden ? $r["id_kue_krit"] : $r["id_kriteria"]; ?>">
+<?php         if (!$responden) { ?>
+    <div class="tools">
+        <button type="button" data-list-item="remove" class="transparent-btn">
+            <i class="fa fa-trash-o" title="Delete"></i>
+        </button>
+    </div>
+<?php         } ?>
+</li>
+<?php 
+          } //Kriteria items end loop
+      } //is $result set?
+?>

@@ -8,6 +8,9 @@ class AuthController extends Controller
 
     public function indexAction()
     {
+        if (!empty($this->session->get("auth"))) { // Already logged in?
+            return $this->response->redirect("/"); // Go home, you're drunk!
+        }
         $this->view->disableLevel(View::LEVEL_MAIN_LAYOUT);
         $this->view->pick("login/index");
     }

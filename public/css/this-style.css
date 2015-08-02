@@ -57,11 +57,28 @@
 .full-width {
     width: 100%;
 }
-.actions-btn {
+.action-btn {
     display: none;
 }
-.actions-btn:hover,
-table tr:hover > td .actions-btn,
-table tbody tr:hover > td .actions-btn {
+.action-btn button {
+    padding: 0px 6px;
+}
+.action-btn:hover,
+table tr:hover > td .action-btn,
+table tbody tr:hover > td .action-btn {
     display: inline-block;
+}
+input[type=number].no-spinner::-webkit-inner-spin-button,
+input[type=number].no-spinner::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+li .hover-rotate i {
+    -webkit-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+}
+li:hover .hover-rotate i {
+    -ms-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
